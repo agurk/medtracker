@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [MedTaken::class], version = 3)
+@Database(entities = [MedTaken::class], version = 5)
 abstract class MTRoomDatabase : RoomDatabase() {
     abstract fun mtDAO(): MTDAO
 

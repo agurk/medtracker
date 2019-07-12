@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medtracker.R
+import java.time.*
+import java.time.format.DateTimeFormatter
 
-class MTListAdapter internal constructor(context: Context) : RecyclerView.Adapter<MTListAdapter.MTViewHolder>() {
+
+class TakenDetailsAdapter internal constructor(context: Context) : RecyclerView.Adapter<TakenDetailsAdapter.MTViewHolder>() {
 
         private val inflater: LayoutInflater = LayoutInflater.from(context)
-        private var times = emptyList<MedTaken>() // Cached copy of words
+        private var times = emptyList<MedTaken>()
 
         inner class MTViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val mtMedicineView: TextView = itemView.findViewById(R.id.medicine_textview)
@@ -26,7 +29,7 @@ class MTListAdapter internal constructor(context: Context) : RecyclerView.Adapte
         override fun onBindViewHolder(holder: MTViewHolder, position: Int) {
             val current = times[position]
             holder.mtMedicineView.text = current.medicine
-            holder.mtTimeView.text = current.time
+            holder.mtTimeView.text = ZonedDateTime.parse(current.zDateTime).toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
         }
 
         internal fun setTimes(times: List<MedTaken>) {

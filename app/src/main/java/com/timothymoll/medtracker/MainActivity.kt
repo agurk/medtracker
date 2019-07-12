@@ -2,22 +2,18 @@ package com.timothymoll.medtracker
 
 import android.app.Activity
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
-import android.icu.util.Calendar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medtracker.R
-import java.sql.Date
-import java.sql.Timestamp
-import java.time.LocalDateTime
+import java.time.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,25 +26,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        val adapter = MTListAdapter(this)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        // Get a new or existing ViewModel from the ViewModelProvider.
         mtViewModel = ViewModelProviders.of(this).get(MTViewModel::class.java)
 
-        // Add an observer on the LiveData returned by getAlphabetizedWords.
-        // The onChanged() method fires when the observed data changes and the activity is
-        // in the foreground.
-        mtViewModel.allValues.observe(this, Observer { mt ->
-            // Update the cached copy of the words in the adapter.
-            mt?.let { adapter.setTimes(it) }
+        val historyView = findViewById<RecyclerView>(R.id.HistoryDetailsView)
+        val historyAdapter = TakenDetailsAdapter(this)
+        historyView.adapter = historyAdapter
+        historyView.layoutManager = LinearLayoutManager(this)
+        mtViewModel.historyValues.observe(this, Observer { mt ->
+            mt?.let { historyAdapter.setTimes(it) }
         })
 
-        val intent = Intent(this, AddMed::class.java)
+        val currentView = findViewById<RecyclerView>(R.id.CurrentDetailsView)
+        val currentAdapter = TakenDetailsAdapter(this)
+        currentView.adapter = currentAdapter
+        currentView.layoutManager = LinearLayoutManager(this)
+        mtViewModel.currentValues.observe(this, Observer { mt ->
+            mt?.let { currentAdapter.setTimes(it) }
+        })
+
+
+        val intent = Intent(this, AddMedActivity::class.java)
         fab.setOnClickListener {
-            val intent = Intent(this@MainActivity, AddMed::class.java)
+            val intent = Intent(this@MainActivity, AddMedActivity::class.java)
             startActivityForResult(intent, newMTActivityRequestCode)
         }
     }
@@ -61,7 +60,8 @@ class MainActivity : AppCompatActivity() {
 
             intentData?.let { data ->
                 val word = MedTaken(
-                    data.getStringExtra(AddMed.EXTRA_REPLY),
+                    data.getStringExtra(AddMedActivity.EXTRA_REPLY),
+                    ZonedDateTime.now().toString(),//.format(DateTimeFormatter.ISO_INSTANT),
                     LocalDateTime.now().toString()
                 )
                 mtViewModel.insert(word)

@@ -10,7 +10,7 @@ import com.example.medtracker.R
 
 import kotlinx.android.synthetic.main.activity_add_med.*
 
-class AddMed : AppCompatActivity() {
+class AddMedActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

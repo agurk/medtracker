@@ -10,7 +10,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
         <activity
-                android:name="com.timothymoll.medtracker.AddMed"
+                android:name="com.timothymoll.medtracker.AddMedActivity"
                 android:label="@string/title_activity_add_med"
                 android:parentActivityName="com.timothymoll.medtracker.MainActivity"
                 android:theme="@style/AppTheme.NoActionBar">

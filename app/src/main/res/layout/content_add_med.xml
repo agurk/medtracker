@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/activity_add_med"
-        tools:context="com.timothymoll.medtracker.AddMed">
+        tools:context="com.timothymoll.medtracker.AddMedActivity">
 
     <LinearLayout
             android:orientation="vertical"

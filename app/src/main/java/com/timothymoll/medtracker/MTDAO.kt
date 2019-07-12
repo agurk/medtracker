@@ -12,6 +12,9 @@ interface MTDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(vararg medTaken: MedTaken)
 
-    @Query("select * from taken_table order by time desc")
-    fun getAllEntries(): LiveData<List<MedTaken>>
+    @Query("select * from taken_table where zDateTime < date('now') order by zDateTime desc")
+    fun getHistoryTaken(): LiveData<List<MedTaken>>
+
+    @Query("select * from taken_table where zDateTime >= date('now') order by zDateTime desc")
+    fun getCurrentTaken(): LiveData<List<MedTaken>>
 }

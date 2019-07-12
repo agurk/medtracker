@@ -9,16 +9,16 @@
             android:layout_height="match_parent">
         <TextView
                 android:id="@+id/time_textview"
-                style="@style/word_title"
-                android:layout_width="308dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:background="@android:color/background_light"/>
+                android:background="@android:color/background_light"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" android:text="aoeu"/>
         <TextView
                 android:id="@+id/medicine_textview"
-                style="@style/word_title"
                 android:layout_width="105dp"
                 android:layout_height="wrap_content"
-                android:background="@android:color/background_light"/>
+                android:background="@android:color/background_light"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
     </LinearLayout>
 
 </LinearLayout>
