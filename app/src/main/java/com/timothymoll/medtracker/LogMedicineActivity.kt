@@ -6,24 +6,28 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity;
-import com.example.medtracker.R
-
-import kotlinx.android.synthetic.main.activity_add_med.*
-import kotlinx.android.synthetic.main.activity_add_med.toolbar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
+import kotlinx.android.synthetic.main.activity_log_med.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
-class logMedicineActivity : AppCompatActivity() {
+class LogMedicineActivity : AppCompatActivity() {
+
+    private val newMedResponseCode = 1
+    private lateinit var mtViewModel: MTViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_med)
+        setContentView(R.layout.activity_log_med)
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        doAsync {
+        mtViewModel = ViewModelProviders.of(this).get(MTViewModel::class.java)
+
+
+        DoAsync {
             val query = MTRoomDatabase.getDatabase(application, CoroutineScope(Dispatchers.Main)).mtDAO().getAllMeds()
 
 
@@ -31,24 +35,19 @@ class logMedicineActivity : AppCompatActivity() {
 
             query.forEach {
                 val btn = Button(this)
-
-                btn.setText("foo".toCharArray(), 0, 3)
+                btn.text = it.name
+                val id = it.id
+                btn.setOnClickListener{
+                    val replyIntent = Intent()
+                    replyIntent.putExtra(EXTRA_REPLY, id.toString())
+                    setResult(Activity.RESULT_OK, replyIntent)
+                    finish()
+                }
                 layout.addView(btn)
             }
 
         }
 
-
-        val button = findViewById<Button>(R.id.add_0)
-        button.setOnClickListener {
-            val replyIntent = Intent()
-            replyIntent.putExtra(EXTRA_REPLY, "10mg")
-            setResult(Activity.RESULT_OK, replyIntent)
-
-            finish()
-        }
-
-        val intent = Intent(this, logMedicineActivity::class.java)
         addMed.setOnClickListener {
             val intent = Intent(this, AddMedicineActivity::class.java)
             startActivityForResult(intent, 1)
@@ -56,12 +55,26 @@ class logMedicineActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val EXTRA_REPLY = "com.example.android.wordlistsql.REPLY"
+        const val EXTRA_REPLY = "com.timothymoll.android.mt.loggedMed."
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intentData)
+
+        if (requestCode == newMedResponseCode && resultCode == Activity.RESULT_OK) {
+            intentData?.let { data ->
+                val newMed = MedDetails(
+                    data.getStringExtra(AddMedicineActivity.MED_NAME),
+                    data.getStringExtra(AddMedicineActivity.MED_AMOUNT).toInt()
+                )
+                mtViewModel.addMedicine(newMed)
+            }
+        }
     }
 
 }
 
-class doAsync(val handler: () -> Unit) : AsyncTask<Void, Void, Void>() {
+class DoAsync(val handler: () -> Unit) : AsyncTask<Void, Void, Void>() {
     init {
         execute()
     }

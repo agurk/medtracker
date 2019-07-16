@@ -9,8 +9,8 @@ import kotlinx.coroutines.launch
 class MTViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository : MTRepository
-    val historyValues : LiveData<List<MedTaken>>
-    val currentValues : LiveData<List<MedTaken>>
+    val historyValues : LiveData<List<TakenMed>>
+    val currentValues : LiveData<List<TakenMed>>
 
     init {
         val mtDAO = MTRoomDatabase.getDatabase(application, viewModelScope).mtDAO()
@@ -21,5 +21,9 @@ class MTViewModel(application: Application) : AndroidViewModel(application) {
 
     fun insert(medTaken: MedTaken) = viewModelScope.launch {
         repository.insert(medTaken)
+    }
+
+    fun addMedicine(newMed: MedDetails) = viewModelScope.launch {
+        repository.addMedicine(newMed)
     }
 }

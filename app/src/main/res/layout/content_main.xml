@@ -19,21 +19,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/textView3"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
-        <LinearLayout
-                android:orientation="horizontal"
+        <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="34dp">
-            <TextView
-                    android:text="Total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/lastTakenTime" android:layout_weight="1"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-            <TextView
-                    android:text="TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/lastTakenMed" android:layout_weight="1"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-        </LinearLayout>
+                android:layout_height="62dp" tools:listitem="@layout/recyclerview_item" android:id="@+id/CurrentView">
+        </androidx.recyclerview.widget.RecyclerView>
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp"/>
         <TextView
                 android:text="Details"
                 android:layout_width="match_parent"

@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.timothymoll.medtracker.AddMedActivity">
+        tools:context="com.timothymoll.medtracker.LogMedicineActivity">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
@@ -21,6 +21,13 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_add_med"/>
+    <include layout="@layout/content_log_med"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addMed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@android:drawable/ic_menu_add"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,14 +1,12 @@
 package com.timothymoll.medtracker
 
-import androidx.sqlite.db.SupportSQLiteDatabase
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
-@Database(entities = [MedTaken::class], version = 5)
+@Database(entities = [MedTaken::class, MedDetails::class], version = 1)
 abstract class MTRoomDatabase : RoomDatabase() {
     abstract fun mtDAO(): MTDAO
 
@@ -25,9 +23,8 @@ abstract class MTRoomDatabase : RoomDatabase() {
                     "mt_database"
                 )
                     // Wipes and rebuilds instead of migrating if no Migration object.
-                    // Migration is not part of this codelab.
                     .fallbackToDestructiveMigration()
-                    .addCallback(WordDatabaseCallback(scope))
+                    .addCallback(WordDatabaseCallback())
                     .build()
                 INSTANCE = instance
                 // return instance
@@ -35,24 +32,7 @@ abstract class MTRoomDatabase : RoomDatabase() {
             }
         }
 
-        private class WordDatabaseCallback(
-            private val scope: CoroutineScope
-        ) : RoomDatabase.Callback() {
-            /**
-             * Override the onOpen method to populate the database.
-             * For this sample, we clear the database every time it is created or opened.
-             */
-            override fun onOpen(db: SupportSQLiteDatabase) {
-                super.onOpen(db)
-                // If you want to keep the data through app restarts,
-                // comment out the following line.
-//                INSTANCE?.let { database ->
-//                    scope.launch {
-//                        populateDatabase(database.mtDAO())
-//                    }
-//                }
-            }
-        }
+        private class WordDatabaseCallback : RoomDatabase.Callback()
 
 
 //            val tempInstance = INSTANCE

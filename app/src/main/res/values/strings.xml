@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">MedTracker</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_export_db">Export DB</string>
     <string name="title_activity_add_med">AddMed</string>
 </resources>

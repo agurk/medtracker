@@ -1,19 +1,21 @@
 package com.timothymoll.medtracker
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
-
-import kotlinx.android.synthetic.main.activity_main.*
-import android.content.Intent
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.medtracker.R
-import java.time.*
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +30,15 @@ class MainActivity : AppCompatActivity() {
 
         mtViewModel = ViewModelProviders.of(this).get(MTViewModel::class.java)
 
+        val currentView = findViewById<RecyclerView>(R.id.CurrentView)
+        val currentAdapter = CurrentAdapter(this)
+        currentView.adapter = currentAdapter
+        currentView.layoutManager = LinearLayoutManager(this)
+        mtViewModel.currentValues.observe(this, Observer { mt ->
+            mt?.let { currentAdapter.setTimes(it) }
+        })
+
+
         val historyView = findViewById<RecyclerView>(R.id.HistoryDetailsView)
         val historyAdapter = TakenDetailsAdapter(this)
         historyView.adapter = historyAdapter
@@ -36,18 +47,17 @@ class MainActivity : AppCompatActivity() {
             mt?.let { historyAdapter.setTimes(it) }
         })
 
-        val currentView = findViewById<RecyclerView>(R.id.CurrentDetailsView)
-        val currentAdapter = TakenDetailsAdapter(this)
-        currentView.adapter = currentAdapter
-        currentView.layoutManager = LinearLayoutManager(this)
+        val currentDetailsView = findViewById<RecyclerView>(R.id.CurrentDetailsView)
+        val currentDetailsAdapter = TakenDetailsAdapter(this)
+        currentDetailsView.adapter = currentDetailsAdapter
+        currentDetailsView.layoutManager = LinearLayoutManager(this)
         mtViewModel.currentValues.observe(this, Observer { mt ->
-            mt?.let { currentAdapter.setTimes(it) }
+            mt?.let { currentDetailsAdapter.setTimes(it) }
         })
 
 
-        val intent = Intent(this, AddMedActivity::class.java)
         fab.setOnClickListener {
-            val intent = Intent(this@MainActivity, AddMedActivity::class.java)
+            val intent = Intent(this@MainActivity, LogMedicineActivity::class.java)
             startActivityForResult(intent, newMTActivityRequestCode)
         }
     }
@@ -56,11 +66,10 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, intentData)
 
         if (requestCode == newMTActivityRequestCode && resultCode == Activity.RESULT_OK) {
-            System.out.println("Now adding")
 
             intentData?.let { data ->
                 val word = MedTaken(
-                    data.getStringExtra(AddMedActivity.EXTRA_REPLY),
+                    with(data.getStringExtra(LogMedicineActivity.EXTRA_REPLY)) { this.toInt() },
                     ZonedDateTime.now().toString(),//.format(DateTimeFormatter.ISO_INSTANT),
                     LocalDateTime.now().toString()
                 )
@@ -82,12 +91,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_export_db -> {
+                val iedb = ImportExportDB()
+                val success = iedb.exportDB(MTRoomDatabase.getDatabase(application, CoroutineScope(Dispatchers.Main)).mtDAO(), applicationContext)
+                if (success) {
+                    Toast.makeText(applicationContext, "exported ok", Toast.LENGTH_LONG).show()
+                    true
+                } else {
+                    Toast.makeText(applicationContext, "failed", Toast.LENGTH_LONG).show()
+                    false
+                }
+
+
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+
+
 }

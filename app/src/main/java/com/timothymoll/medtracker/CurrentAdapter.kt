@@ -6,18 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 
 
-class TakenDetailsAdapter internal constructor(context: Context) : RecyclerView.Adapter<TakenDetailsAdapter.MTViewHolder>() {
+class CurrentAdapter internal constructor(context: Context) : RecyclerView.Adapter<CurrentAdapter.MTViewHolder>() {
 
         private val inflater: LayoutInflater = LayoutInflater.from(context)
         private var times = emptyList<TakenMed>()
 
         inner class MTViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val mtMedicineView: TextView = itemView.findViewById(R.id.medicine_textview)
-            val mtTimeView: TextView = itemView.findViewById(R.id.time_textview)
+            val valu: TextView = itemView.findViewById(R.id.medicine_textview)
+            val label: TextView = itemView.findViewById(R.id.time_textview)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MTViewHolder {
@@ -26,10 +24,12 @@ class TakenDetailsAdapter internal constructor(context: Context) : RecyclerView.
         }
 
         override fun onBindViewHolder(holder: MTViewHolder, position: Int) {
-            val current = times[position]
-            holder.mtMedicineView.text = current.name
-            holder.mtTimeView.text = ZonedDateTime.parse(current.datetime).toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-
+            holder.label.text = "Total Amount"
+            var total = 0
+            times.forEach {
+                total += it.amount
+            }
+            holder.valu.text = total.toString()
         }
 
         internal fun setTimes(times: List<TakenMed>) {
@@ -37,5 +37,5 @@ class TakenDetailsAdapter internal constructor(context: Context) : RecyclerView.
             notifyDataSetChanged()
         }
 
-        override fun getItemCount() = times.size
+        override fun getItemCount() = 1
     }
