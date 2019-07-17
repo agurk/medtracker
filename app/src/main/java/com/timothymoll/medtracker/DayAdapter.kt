@@ -8,16 +8,14 @@ import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.time.format.DateTimeFormatter
 
 
 class DayAdapter internal constructor(context: Context) : RecyclerView.Adapter<DayAdapter.MTViewHolder>() {
 
         private val inflater: LayoutInflater = LayoutInflater.from(context)
         private var days = emptyList<DataDay>()
-        private var contex = context
 
-        inner class MTViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MTViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val totalAmount : TextView = itemView.findViewById(R.id.day_amount)
             val dayDetails : RecyclerView = itemView.findViewById(R.id.day_details)
             val dayDate : TextView = itemView.findViewById(R.id.day_date)

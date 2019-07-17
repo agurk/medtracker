@@ -11,26 +11,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <TextView
-                android:id="@+id/time_textview"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:background="@android:color/background_light"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        />
-        <TextView
-                android:id="@+id/medicine_textview"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:background="@android:color/background_light"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" android:text="aoeu"
-        />
-        <TextView
-                android:id="@+id/time_elapsed"
+                android:id="@+id/details_textview2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/background_light"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" android:text="aoeu"
-                android:layout_weight="1"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                tools:text="-"/>
+        <TextView
+                android:id="@+id/details_textview"
+                android:layout_height="wrap_content"
+                android:background="@android:color/background_light"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_weight="1" android:layout_width="wrap_content"/>
     </LinearLayout>
 
 

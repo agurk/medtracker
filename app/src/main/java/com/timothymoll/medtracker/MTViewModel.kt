@@ -9,13 +9,11 @@ import kotlinx.coroutines.launch
 class MTViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository : MTRepository
-    val historyValues : LiveData<List<TakenMed>>
     val currentValues : LiveData<List<TakenMed>>
 
     init {
         val mtDAO = MTRoomDatabase.getDatabase(application, viewModelScope).mtDAO()
         repository = MTRepository(mtDAO)
-        historyValues = repository.allEntries
         currentValues = repository.currentEntries
     }
 

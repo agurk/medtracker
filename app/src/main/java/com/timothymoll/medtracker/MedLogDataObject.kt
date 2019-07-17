@@ -1,27 +1,21 @@
 package com.timothymoll.medtracker
 
-import android.app.Activity
-import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class MedLogDataObject {
+class MedLogDataObject(mainAct: MainActivity) {
 
     private var dbData = emptyList<TakenMed>()
     private val dayData = HashMap<String, DataDay>()
-    private val mainActivity : MainActivity
+    private val mainActivity : MainActivity = mainAct
 
-    constructor (mainAct : MainActivity) {
-        mainActivity = mainAct
-    }
+    private val dateFormat  = DateTimeFormatter.ISO_LOCAL_DATE
 
     internal fun updateData(newData : List<TakenMed>) {
         dbData = newData
         dbData.forEach {
             val zDate = ZonedDateTime.parse(it.datetime)
-            val date = zDate.format(DateTimeFormatter.BASIC_ISO_DATE)
-            val prettyDate = zDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
-            val time = zDate.format(DateTimeFormatter.ofPattern("HH:mm"))
+            val date = zDate.format(dateFormat)
             val thisDay = dayData[date] ?: run {
                 val newdd = DataDay(date)
                 dayData[date] = newdd
@@ -30,7 +24,7 @@ class MedLogDataObject {
 
             if (!thisDay.medsTaken.contains(it)) {
                 thisDay.medsTaken.add(it)
-                thisDay.details.add(DayMed(time, it.name, zDate))
+                thisDay.details.add(DayMed(GUIStrings.detailTime(zDate), it.name, zDate))
                 thisDay.total += it.amount
             }
         }
@@ -38,29 +32,27 @@ class MedLogDataObject {
     }
 
     fun todayTotal() : Int {
-        val today = ZonedDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE)
+        val today = getToday()
         return dayData[today]?.total ?: 0
      }
 
     fun todayDetails() : List<DayMed> {
-        val today = ZonedDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE)
+        val today = getToday()
         val result = dayData[today]?.details?.sortedByDescending { t -> t.time  } ?: emptyList()
         result.forEach {
-            val duration = Duration.between(it.date, ZonedDateTime.now())
-            val mins = duration.toMinutes()
-            val hours = duration.minusMinutes(mins).toHours()
-            it.timeSince = ""
-            if (hours > 0) it.timeSince = hours.toString() + "h "
-            it.timeSince += mins.toString()
-            if (hours == 0L) it.timeSince += " mins"
+            it.timeSince = GUIStrings.timeSince(it.date)
         }
         return result
     }
 
     fun historyData() : List<DataDay> {
-        val today = ZonedDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE)
+        val today = getToday()
         val slice = dayData.filterNot { it.key ==  today}
         return slice.values.toList()
+    }
+
+    private fun getToday() : String {
+        return ZonedDateTime.now().format(dateFormat)
     }
 }
 

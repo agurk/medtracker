@@ -60,7 +60,7 @@
 
         <View
                 android:background="#D3D3D3"
-                android:id="@+id/item_divider" android:layout_height="2dp"
+                android:id="@+id/item_divider2" android:layout_height="2dp"
                 android:layout_width="match_parent"/>
 
         <androidx.recyclerview.widget.RecyclerView

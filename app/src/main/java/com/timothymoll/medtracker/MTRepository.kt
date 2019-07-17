@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 
 class MTRepository (private val mtDao: MTDAO) {
 
-    val allEntries: LiveData<List<TakenMed>> = mtDao.getHistoryTaken()
     val currentEntries: LiveData<List<TakenMed>> = mtDao.getCurrentDetailsTaken()
 
     @WorkerThread

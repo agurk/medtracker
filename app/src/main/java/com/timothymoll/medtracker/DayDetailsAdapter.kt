@@ -14,9 +14,7 @@ class DayDetailsAdapter internal constructor(context: Context) : RecyclerView.Ad
         private var times = emptyList<DayMed>()
 
         inner class MTViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val mtMedicineView: TextView = itemView.findViewById(R.id.medicine_textview)
-            val mtTimeView: TextView = itemView.findViewById(R.id.time_textview)
-            val mtTimeSince : TextView = itemView.findViewById(R.id.time_elapsed)
+            val detailsTV: TextView = itemView.findViewById(R.id.details_textview)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MTViewHolder {
@@ -26,10 +24,7 @@ class DayDetailsAdapter internal constructor(context: Context) : RecyclerView.Ad
 
         override fun onBindViewHolder(holder: MTViewHolder, position: Int) {
             val current = times[position]
-            holder.mtMedicineView.text = current.name
-            holder.mtTimeView.text = current.time
-            holder.mtTimeSince.text  = current.timeSince
-
+            holder.detailsTV.text = GUIStrings.dayDetails(current)
         }
 
         internal fun setTimes(times: List<DayMed>) {
