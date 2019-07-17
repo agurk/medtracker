@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" android:layout_marginHorizontal="8dp">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <TextView
+                android:id="@+id/day_date"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/background_light"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" android:text="total"/>
+        <TextView
+                android:id="@+id/day_amount"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/background_light"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" android:textAlignment="center"/>
+        <TextView
+                android:id="@+id/mg"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/background_light"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                tools:text="mg" android:visibility="visible" android:text="mg"/>
+        <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_weight="1"/>
+        <ToggleButton
+                android:text="ToggleButton"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content" android:id="@+id/details_button"
+                android:textOff="+" android:textOn="-" android:checked="false"
+        />
+
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/day_details"
+            tools:listitem="@layout/day_details_item"
+            android:layout_height="wrap_content" android:visibility="gone" android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="4dp"/>
+    <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    <View
+            android:background="#F3F3F3"
+            android:id="@+id/item_divider" android:layout_height="1dp"
+            android:layout_width="match_parent"/>
+
+</LinearLayout>

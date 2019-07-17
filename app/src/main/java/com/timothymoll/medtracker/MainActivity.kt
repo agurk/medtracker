@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private val newMTActivityRequestCode = 1
     private lateinit var mtViewModel: MTViewModel
+    private lateinit var medLogDataObject : MedLogDataObject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,37 +31,54 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         mtViewModel = ViewModelProviders.of(this).get(MTViewModel::class.java)
-
-        val currentView = findViewById<RecyclerView>(R.id.CurrentView)
-        val currentAdapter = CurrentAdapter(this)
-        currentView.adapter = currentAdapter
-        currentView.layoutManager = LinearLayoutManager(this)
-        mtViewModel.currentValues.observe(this, Observer { mt ->
-            mt?.let { currentAdapter.setTimes(it) }
-        })
+        medLogDataObject = MedLogDataObject(this)
 
 
         val historyView = findViewById<RecyclerView>(R.id.HistoryDetailsView)
-        val historyAdapter = TakenDetailsAdapter(this)
+        val historyAdapter = DayAdapter(this)
         historyView.adapter = historyAdapter
         historyView.layoutManager = LinearLayoutManager(this)
-        mtViewModel.historyValues.observe(this, Observer { mt ->
-            mt?.let { historyAdapter.setTimes(it) }
-        })
+
 
         val currentDetailsView = findViewById<RecyclerView>(R.id.CurrentDetailsView)
-        val currentDetailsAdapter = TakenDetailsAdapter(this)
+        val currentDetailsAdapter = DayDetailsAdapter(this)
         currentDetailsView.adapter = currentDetailsAdapter
         currentDetailsView.layoutManager = LinearLayoutManager(this)
-        mtViewModel.currentValues.observe(this, Observer { mt ->
-            mt?.let { currentDetailsAdapter.setTimes(it) }
-        })
 
+        mtViewModel.currentValues.observe(this, Observer { mt ->
+            mt?.let { medLogDataObject.updateData(it) }
+        })
 
         fab.setOnClickListener {
             val intent = Intent(this@MainActivity, LogMedicineActivity::class.java)
             startActivityForResult(intent, newMTActivityRequestCode)
         }
+
+        val currentDetailsHandler = android.os.Handler()
+
+        val updateTimerThread = object : Runnable {
+            override fun run() {
+                updateCurrentDetails()
+                currentDetailsHandler.postDelayed(this, 60000)
+            }
+        }
+
+        currentDetailsHandler.postDelayed(updateTimerThread, 0)
+    }
+
+    fun updateGui(data : MedLogDataObject) {
+        val amount = data.todayTotal()
+        findViewById<TextView>(R.id.day_total).text = amount.toString()
+
+        updateCurrentDetails()
+
+        val historyDaysAdapter =  findViewById<RecyclerView>(R.id.HistoryDetailsView).adapter as DayAdapter
+        historyDaysAdapter.setTimes(data.historyData())
+    }
+
+    fun updateCurrentDetails()  {
+        val currentDetailsAdapter = findViewById<RecyclerView>(R.id.CurrentDetailsView).adapter as DayDetailsAdapter
+        currentDetailsAdapter.setTimes(medLogDataObject.todayDetails())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
@@ -75,12 +94,6 @@ class MainActivity : AppCompatActivity() {
                 )
                 mtViewModel.insert(word)
             }
-//        } else {
-//            Toast.makeText(
-//                applicationContext,
-//                R.string.empty_not_saved,
-//                Toast.LENGTH_LONG
-//            ).show()
        }
     }
 
@@ -102,13 +115,8 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "failed", Toast.LENGTH_LONG).show()
                     false
                 }
-
-
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-
-
 }

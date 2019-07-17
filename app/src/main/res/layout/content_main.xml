@@ -13,30 +13,40 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="32dp">
-        <TextView
-                android:text="Today"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/textView3"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
-        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginBottom="32dp" android:layout_marginHorizontal="4dp">
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="62dp" tools:listitem="@layout/recyclerview_item" android:id="@+id/CurrentView">
-        </androidx.recyclerview.widget.RecyclerView>
+                android:layout_height="wrap_content">
+            <TextView
+                    android:text="Today"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/textView3"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
+            <TextView
+                    android:text="0"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content" android:id="@+id/day_total"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" android:textAlignment="textEnd"/>
+            <TextView
+                    android:text=" mg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/day_total2"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" android:layout_weight="1"/>
+        </LinearLayout>
+        <View
+                android:background="#D3D3D3"
+                android:id="@+id/item_divider" android:layout_height="2dp"
+                android:layout_width="match_parent"/>
         <Space
                 android:layout_width="match_parent"
-                android:layout_height="5dp"/>
-        <TextView
-                android:text="Details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/textView"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
+                android:layout_height="10dp"/>
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/CurrentDetailsView"
-                tools:listitem="@layout/recyclerview_item"
-        >
+                tools:listitem="@layout/day_details_item"
+                android:layout_marginHorizontal="14dp">
 
         </androidx.recyclerview.widget.RecyclerView>
         <Space
@@ -48,11 +58,16 @@
                 android:layout_height="wrap_content" android:id="@+id/textView6"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
 
+        <View
+                android:background="#D3D3D3"
+                android:id="@+id/item_divider" android:layout_height="2dp"
+                android:layout_width="match_parent"/>
+
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/HistoryDetailsView"
-                tools:listitem="@layout/recyclerview_item"
+                tools:listitem="@layout/day_item"
         >
 
         </androidx.recyclerview.widget.RecyclerView>
