@@ -28,7 +28,7 @@ class DayDetailsAdapter internal constructor(context: Context) : RecyclerView.Ad
         }
 
         internal fun setTimes(times: List<DayMed>) {
-            this.times = times
+            this.times = times.sortedBy { it.time }.reversed()
             notifyDataSetChanged()
         }
 

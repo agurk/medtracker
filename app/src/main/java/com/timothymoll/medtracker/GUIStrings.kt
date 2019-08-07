@@ -25,13 +25,19 @@ class GUIStrings {
             val hours = duration.toHours()
             val mins = duration.minusHours(hours).toMinutes()
             var timeSince = ""
+
             if ( hours + mins == 0L) return zeroDurationString
+
             if (hours > 0) timeSince = hours.toString() + "h "
-            timeSince += mins.toString()
-            if (hours == 0L) {
-                timeSince += " min"
-                if (mins > 0) timeSince += "s"
+
+            if (mins > 0) {
+                timeSince += mins.toString()
+                if (hours == 0L) {
+                    timeSince += " min"
+                    if (mins > 0) timeSince += "s"
+                }
             }
+
             return timeSince
         }
 

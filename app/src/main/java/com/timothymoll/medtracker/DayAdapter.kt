@@ -50,7 +50,7 @@ class DayAdapter internal constructor(context: Context) : RecyclerView.Adapter<D
         }
 
         internal fun setTimes(days: List<DataDay>) {
-            this.days = days
+            this.days = days.sortedBy{ it.date }.reversed()
             notifyDataSetChanged()
         }
 

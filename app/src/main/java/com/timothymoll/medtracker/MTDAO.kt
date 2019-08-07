@@ -19,7 +19,7 @@ interface MTDAO {
     fun getAllMeds(): List<MedDetails>
 
   //  @Query("select * from taken_table, med_details where taken_table.medicineId = med_details.id and zDateTime >= date('now') order by zDateTime desc")
-    @Query("select name, zDateTime, amount from taken_table, med_details where taken_table.medicineId = med_details.id order by zDateTime desc")
+    @Query("select name, zDateTime, amount from taken_table, med_details where taken_table.medicineId = med_details.id")
     fun getCurrentDetailsTaken(): LiveData<List<TakenMed>>
 
     @Query("select name, amount, medicineId, zDatetime, localDateTime from taken_table, med_details where taken_table.medicineId = med_details.id")
