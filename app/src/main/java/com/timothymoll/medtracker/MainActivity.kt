@@ -66,6 +66,11 @@ class MainActivity : AppCompatActivity() {
         currentDetailsHandler.postDelayed(updateTimerThread, 0)
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateCurrentDetails()
+    }
+
     fun updateGui(data : MedLogDataObject) {
         val amount = data.todayTotal()
         findViewById<TextView>(R.id.day_total).text = amount.toString()
